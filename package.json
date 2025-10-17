@@ -3,8 +3,13 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "dev:frontend": "nuxt dev",
+    "dev:backend": "node server.js",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "start:frontend": "nuxt start",
+    "start:backend": "node server.js",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -14,12 +19,19 @@
     "@nuxt/ui": "^4.0.1",
     "@pinia/nuxt": "^0.11.2",
     "@tailwindcss/vite": "^4.1.14",
+    "axios": "^1.12.2",
+    "dotenv": "^17.2.3",
     "eslint": "^9.37.0",
     "nuxt": "^4.1.3",
     "pinia": "^3.0.3",
+    "socket.io": "^4.8.1",
+    "socket.io-client": "^4.8.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
   }
 }

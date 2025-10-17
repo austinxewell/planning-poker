@@ -7,10 +7,6 @@ export default withNuxt(
   {
     files: ["**/*.{ts,vue}"],
     rules: {
-        "vue/multi-word-component-names": [
-          "error", 
-          { ignores: ["index", "default"] }
-        ],
       "no-undef": "off",
       "func-style": ["error", "declaration"],
       "space-before-function-paren": ["error", "never"],

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDarkModeStore } from '~/store/useDarkModeStore'
+import { useDarkModeStore } from '~/stores/useDarkModeStore'
 
 const props = withDefaults(defineProps<{
     iconSize?: string
