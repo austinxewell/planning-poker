@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
@@ -9,10 +10,18 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app";
 
+// Express setup
 const app = express();
+
+// Enable CORS for your frontend
+app.use(cors({
+  origin: FRONTEND_URL,
+  methods: ["GET", "POST", "OPTIONS"],
+  credentials: true,
+}));
 app.use(express.json());
 
-// Health check endpoint (optional but useful on Railway)
+// Health check endpoint
 app.get("/", (req, res) => {
   res.send("Planning Poker backend is running");
 });
