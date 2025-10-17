@@ -10,34 +10,42 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app";
 
-// ✅ Allow both production and local development
+// Allowed origins for local dev + production
 const allowedOrigins = [
   FRONTEND_URL,
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
-];
+].filter(Boolean);
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow server-to-server requests (no origin) or allowed origins
     if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.warn(`❌ Blocked by CORS: ${origin}`);
-      callback(new Error("Not allowed by CORS"));
+      return callback(null, true);
     }
+    console.warn(`Blocked by CORS: ${origin}`);
+    return callback(null, false); // don’t throw, just block
   },
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
 };
 
-// Express setup
 const app = express();
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 app.use(express.json());
+
+// ✅ Preflight middleware (replaces app.options("*", ...))
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", req.headers.origin || FRONTEND_URL);
+    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 // Health check endpoint
 app.get("/", (req, res) => {
@@ -50,14 +58,12 @@ app.post("/session", (req, res) => {
   res.json({ id });
 });
 
-// HTTP + Socket.IO setup
+// HTTP + Socket.IO
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
-  cors: corsOptions,
-});
+const io = new Server(httpServer, { cors: corsOptions });
 
-// In-memory session store
+// In-memory sessions
 const sessions = new Map();
 
 io.on("connection", (socket) => {
@@ -120,7 +126,7 @@ io.on("connection", (socket) => {
 });
 
 // Start server
-httpServer.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+httpServer.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
   console.log("Allowed Origins:", allowedOrigins);
 });
