@@ -10,15 +10,33 @@ dotenv.config();
 const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app";
 
-// Express setup
-const app = express();
+// ✅ Allow both production and local development
+const allowedOrigins = [
+  FRONTEND_URL,
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+];
 
-// Enable CORS for your frontend
-app.use(cors({
-  origin: FRONTEND_URL,
+const corsOptions = {
+  origin: (origin, callback) => {
+    // Allow server-to-server requests (no origin) or allowed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`❌ Blocked by CORS: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "OPTIONS"],
   credentials: true,
-}));
+};
+
+// Express setup
+const app = express();
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 // Health check endpoint
@@ -32,16 +50,11 @@ app.post("/session", (req, res) => {
   res.json({ id });
 });
 
-// Attach Express app to HTTP server
+// HTTP + Socket.IO setup
 const httpServer = createServer(app);
 
-// Socket.IO setup
 const io = new Server(httpServer, {
-  cors: {
-    origin: FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
+  cors: corsOptions,
 });
 
 // In-memory session store
@@ -108,5 +121,6 @@ io.on("connection", (socket) => {
 
 // Start server
 httpServer.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log("Allowed Origins:", allowedOrigins);
 });
