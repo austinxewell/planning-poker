@@ -4205,7 +4205,7 @@ function _expandFromEnv(value) {
 const _inlineRuntimeConfig = {
   "app": {
     "baseURL": "/",
-    "buildId": "4af7bf75-4441-4eae-b405-6089a7cfb05c",
+    "buildId": "5c9a8945-0f3b-4de7-8e3a-fed603a06339",
     "buildAssetsDir": "/_nuxt/",
     "cdnURL": ""
   },
@@ -4238,7 +4238,7 @@ const _inlineRuntimeConfig = {
     }
   },
   "public": {
-    "SOCKET_URL": "http://localhost:4000"
+    "SOCKET_URL": "https://planning-poker-production-1fa6.up.railway.app"
   },
   "icon": {
     "serverKnownCssClasses": []
