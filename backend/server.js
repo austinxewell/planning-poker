@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const PORT = process.env.SOCKET_PORT || 4000;
+const PORT = process.env.PORT || process.env.SOCKET_PORT || 4000;
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
