@@ -1,0 +1,14 @@
+{
+  "name": "planning-poker-backend",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.1",
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {}
+}
