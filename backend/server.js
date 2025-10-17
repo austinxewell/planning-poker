@@ -4,13 +4,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const PORT = process.env.PORT || process.env.SOCKET_PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.VITE_SOCKET_URL || "*",
-    methods: ["GET", "POST"]
+    origin: process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app",
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
