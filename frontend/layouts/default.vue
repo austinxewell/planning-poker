@@ -1,20 +1,33 @@
 <template>
-  <div>
-    <!-- You can add global layout elements like header/footer here -->
-    <header class="bg-gray-800 text-white p-4">
-      <h1 class="text-xl font-bold">AuEwellify Planning Poker</h1>
-    </header>
+    <div class="flex flex-col min-h-screen">
+        <!-- Header -->
+        <header class="bg-gray-800 text-white p-4 flex items-center gap-2">
+            <img
+                class="w-14 h-14"
+                :src="smallLogo"
+                alt="Small Logo"
+            />
+            <img
+                class="h-8 sm:hidden lg:block"
+                :src="textLogo"
+                alt="Text Logo"
+            />
+        </header>
 
-    <main class="p-6">
-      <slot /> <!-- NuxtPage content goes here -->
-    </main>
+        <!-- Main content -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <slot /> <!-- NuxtPage content goes here -->
+        </main>
 
-    <footer class="text-center text-gray-500 mt-6">
-      &copy; 2025 Planning Poker
-    </footer>
-  </div>
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-center text-gray-500 p-4">
+            &copy; {{ currentYear }} AuEwellify - Planning Poker
+        </footer>
+    </div>
 </template>
 
 <script setup>
-// No top-level browser code here
+const smallLogo = '/images/small-logo.png'
+const textLogo = '/images/text-logo.png'
+const currentYear =  computed(() => new Date().getFullYear())
 </script>

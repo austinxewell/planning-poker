@@ -1,15 +1,18 @@
 <template>
-    <div class="min-h-screen p-6 bg-gray-50 text-black">
-        <h1 class="text-3xl font-bold mb-4">Session {{ sessionId }}</h1>
-        <h2 class="text-lg mb-4">Hello, {{ username }}</h2>
+    <div class="min-h-screen p-6 bg-[#0f172a] text-white flex flex-col">
+        <!-- Session & Username -->
+        <div class="mb-6 text-center">
+            <h1 class="text-3xl font-bold mb-1">Session {{ sessionId }}</h1>
+            <h2 class="text-lg text-gray-300">Hello, {{ username }}</h2>
+        </div>
 
         <!-- Voting Cards -->
-        <div class="flex flex-wrap gap-3 mb-6">
+        <div class="flex flex-wrap gap-4 justify-center mb-6">
             <button
                 v-for="card in cardOptions"
                 :key="card"
-                class="w-28 h-36 text-white rounded"
-                :class="card === myVote ? 'bg-blue-800' : 'bg-blue-600'"
+                class="w-24 h-32 rounded-xl text-white text-2xl font-bold flex items-center justify-center shadow-md"
+                :class="card === myVote ? 'bg-[#cf8500] text-[#0f172a]' : 'bg-[#1e293b] hover:bg-[#374151]'"
                 :disabled="sessionEnded"
                 @click="vote(card)"
             >
@@ -17,49 +20,68 @@
             </button>
         </div>
 
-        <!-- Owner Controls -->
-        <div v-if="username === owner && !sessionEnded" class="flex gap-3 mb-6">
-            <button class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" @click="reveal">Reveal</button>
-            <button class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" @click="reset">Reset</button>
+        <!-- Members -->
+        <div class="flex flex-wrap justify-center gap-2 mb-4">
+            <span
+                v-for="user in users"
+                :key="user"
+                class="px-3 py-1 bg-[#1e293b] rounded-full text-sm font-medium"
+            >
+                {{ user }}
+            </span>
         </div>
 
-        <!-- Leave Button -->
-        <div class="mb-6">
-            <button class="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600" @click="leaveSession">
-                Leave Session
+        <!-- Average Vote + Votes List -->
+        <div class="flex flex-col lg:flex-row gap-6 mb-6 max-w-4xl mx-auto w-full">
+            <!-- Average Vote -->
+            <div class="bg-[#1e293b] p-6 rounded-xl text-center lg:w-48 flex-shrink-0 flex flex-col items-center justify-center">
+                <h3 class="text-lg font-semibold mb-2 text-[#cf8500]">Average Vote</h3>
+                <p class="text-5xl font-bold">{{ averageVote }}</p>
+            </div>
+
+            <!-- Votes List -->
+            <div class="flex-1 bg-[#1e293b] p-4 rounded-xl max-h-[500px] overflow-y-auto">
+                <h3 class="text-lg font-semibold mb-2 text-[#cf8500]">Votes</h3>
+                <ul class="space-y-2">
+                    <li
+                        v-for="voteEntry in displayVotes"
+                        :key="voteEntry.user"
+                        class="flex justify-between p-2 rounded bg-[#0f172a]"
+                    >
+                        <span>{{ voteEntry.user }}</span>
+                        <span>
+                            <span v-if="voteEntry.voted">✅</span>
+                            {{ voteEntry.vote }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Owner Controls -->
+        <div v-if="username === owner && !sessionEnded" class="flex gap-3 mb-6 justify-center">
+            <button
+                class="px-4 py-2 bg-[#cf8500] text-[#0f172a] font-bold rounded hover:bg-[#e6a930]"
+                @click="reveal"
+            >
+                Reveal
+            </button>
+            <button
+                class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                @click="reset"
+            >
+                Reset
             </button>
         </div>
 
-        <!-- Votes List -->
-        <div>
-            <h3 class="text-xl font-semibold mb-2">Votes</h3>
-            <ul class="space-y-1">
-                <li
-                    v-for="voteEntry in displayVotes"
-                    :key="voteEntry.user"
-                    class="p-2 border rounded bg-white flex justify-between"
-                >
-                    <span class="font-medium">{{ voteEntry.user }}</span>
-                    <span>
-                        <span v-if="voteEntry.voted">✅</span>
-                        {{ voteEntry.vote }}
-                    </span>
-                </li>
-            </ul>
-        </div>
-
-        <!-- Connected Users -->
-        <div class="mt-6">
-            <h3 class="text-xl font-semibold mb-2">Connected Users</h3>
-            <ul class="space-y-1">
-                <li
-                    v-for="user in users"
-                    :key="user"
-                    class="p-2 border rounded bg-white"
-                >
-                    {{ user }}
-                </li>
-            </ul>
+        <!-- Leave Button -->
+        <div class="mb-6 text-center">
+            <button
+                class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+                @click="leaveSession"
+            >
+                Leave Session
+            </button>
         </div>
     </div>
 </template>
@@ -87,21 +109,15 @@ const cardOptions = [1, 2, 3, 5, 8, 13, 21, '?']
 const config = useRuntimeConfig()
 let socket
 
-// Initialize browser-only code in onMounted
 onMounted(() => {
-    // Prompt for username
     username.value = prompt('Enter your name:') || `User${Math.floor(Math.random() * 1000)}`
-
-    // Initialize socket
     socket = io(config.public.SOCKET_URL)
 
-    // Join session
     socket.emit('join', {
         sessionId: sessionId.value,
         username: username.value 
     })
 
-    // Socket events
     socket.on('update', (data) => {
         users.value = data.users
         votes.value = data.votes
@@ -116,42 +132,37 @@ onMounted(() => {
     })
 })
 
-// Watch for route changes (dynamic session ID)
 watch(() => route.params.id, (newId) => {
     sessionId.value = newId
-    if (socket) 
-        socket.emit('join', {
-            sessionId: newId,
-            username: username.value 
-        })
-  
+    socket?.emit('join', {
+        sessionId: newId,
+        username: username.value 
+    })
 })
 
-// Actions
+const averageVote = computed(() => {
+    if (!revealed.value) return '-'  // hide until reveal
+    const numericVotes = Object.values(votes.value)
+        .filter(v => !isNaN(v))
+        .map(Number)
+
+    if (numericVotes.length === 0) return '-'
+    const sum = numericVotes.reduce((a, b) => a + b, 0)
+    return (sum / numericVotes.length).toFixed(1)
+})
+
 function vote(value) {
-    if (!sessionEnded.value && socket) 
-        socket.emit('vote', {
-            sessionId: sessionId.value,
-            username: username.value,
-            value 
-        })
-  
+    if (!sessionEnded.value) socket?.emit('vote', {
+        sessionId: sessionId.value,
+        username: username.value,
+        value 
+    })
 }
 
-function reveal() {
-    socket?.emit('reveal', sessionId.value)
-}
+function reveal() { socket?.emit('reveal', sessionId.value) }
+function reset() { socket?.emit('reset', sessionId.value) }
+function leaveSession() { socket?.emit('leave', sessionId.value); router.push('/') }
 
-function reset(){
-    socket?.emit('reset', sessionId.value)
-} 
-
-function leaveSession() {
-    socket?.emit('leave', sessionId.value)
-    router.push('/')
-}
-
-// Computed
 const displayVotes = computed(() =>
     Object.entries(votes.value).map(([user, voteValue]) => ({
         user,
