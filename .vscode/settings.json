@@ -1,0 +1,12 @@
+{
+  // Required in vscode-eslint < v3.0.10 only
+  "eslint.useFlatConfig": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "cSpell.words": [
+    "Ewell",
+    "Supabase",
+    "Vuetify"
+  ]
+}
