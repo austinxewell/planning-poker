@@ -2,16 +2,14 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { io } from 'socket.io-client';
+import { useRuntimeConfig } from '#imports';
 
 const route = useRoute();
 const router = useRouter();
 const sessionId = ref(route.params.id);
 
-const username = ref(prompt("Enter your name:") || `User${Math.floor(Math.random()*1000)}`);
-const owner = ref("");
-
-const config = useRuntimeConfig();
-const socket = io(config.public.SOCKET_URL);
+const username = ref('');
+const owner = ref('');
 
 const users = ref([]);
 const votes = ref({});
@@ -20,44 +18,59 @@ const sessionEnded = ref(false);
 
 const cardOptions = [1, 2, 3, 5, 8, 13, 21, "?"];
 
+const config = useRuntimeConfig();
+let socket;
+
+// Initialize browser-only code in onMounted
 onMounted(() => {
+  // Prompt for username
+  username.value = prompt("Enter your name:") || `User${Math.floor(Math.random() * 1000)}`;
+
+  // Initialize socket
+  socket = io(config.public.SOCKET_URL);
+
+  // Join session
   socket.emit("join", { sessionId: sessionId.value, username: username.value });
+
+  // Socket events
+  socket.on("update", (data) => {
+    users.value = data.users;
+    votes.value = data.votes;
+    revealed.value = data.revealed;
+    owner.value = data.owner;
+  });
+
+  socket.on("sessionEnded", () => {
+    sessionEnded.value = true;
+    alert("The session has ended because the owner left.");
+    router.push("/");
+  });
 });
 
+// Watch for route changes (dynamic session ID)
 watch(() => route.params.id, (newId) => {
   sessionId.value = newId;
-  socket.emit("join", { sessionId: newId, username: username.value });
-});
-
-// Socket events
-socket.on("update", (data) => {
-  users.value = data.users;
-  votes.value = data.votes;
-  revealed.value = data.revealed;
-  owner.value = data.owner;
-});
-
-socket.on("sessionEnded", () => {
-  sessionEnded.value = true;
-  alert("The session has ended because the owner left.");
-  router.push("/");
+  if (socket) {
+    socket.emit("join", { sessionId: newId, username: username.value });
+  }
 });
 
 // Actions
 const vote = (value) => {
-  if (!sessionEnded.value) {
+  if (!sessionEnded.value && socket) {
     socket.emit("vote", { sessionId: sessionId.value, username: username.value, value });
   }
 };
 
-const reveal = () => socket.emit("reveal", sessionId.value);
-const reset = () => socket.emit("reset", sessionId.value);
+const reveal = () => socket?.emit("reveal", sessionId.value);
+const reset = () => socket?.emit("reset", sessionId.value);
 
 const leaveSession = () => {
-  socket.emit("leave", sessionId.value);
+  socket?.emit("leave", sessionId.value);
   router.push("/");
 };
 
+// Computed
 const displayVotes = computed(() =>
   Object.entries(votes.value).map(([user, voteValue]) => ({
     user,
@@ -66,12 +79,7 @@ const displayVotes = computed(() =>
   }))
 );
 
-// -------------------------
-// Computed for current user vote
-// -------------------------
-const myVote = computed(() => {
-  return votes.value[username.value] ?? null;
-});
+const myVote = computed(() => votes.value[username.value] ?? null);
 </script>
 
 <template>

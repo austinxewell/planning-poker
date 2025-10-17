@@ -17,8 +17,9 @@ const createSession = async () => {
 };
 
 const joinSession = () => {
-  if (!joinId.value.trim()) return;
-  router.push(`/session/${joinId.value.trim()}`);
+  const id = joinId.value.trim();
+  if (!id) return;
+  router.push(`/session/${id}`);
 };
 </script>
 
