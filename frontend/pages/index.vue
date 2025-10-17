@@ -2,17 +2,17 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { useRuntimeConfig } from '#imports';
 
 const router = useRouter();
 const joinId = ref('');
+const config = useRuntimeConfig();
 
-// Put your deployed Railway backend URL here
-const BACKEND_URL = 'https://your-backend-railway-url.com';
 
 const createSession = async () => {
   try {
     // Call the deployed backend instead of /api/session
-    const res = await axios.post(`${BACKEND_URL}/session`);
+    const res = await axios.post(`${config.public.SOCKET_URL}/session`);
     const id = res.data.id;
     router.push(`/session/${id}`);
   } catch (err) {

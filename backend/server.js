@@ -7,20 +7,29 @@ import { randomUUID } from "crypto";
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app";
 
 const app = express();
 app.use(express.json());
 
-// Simple session creation endpoint
+// Health check endpoint (optional but useful on Railway)
+app.get("/", (req, res) => {
+  res.send("Planning Poker backend is running");
+});
+
+// Session creation endpoint
 app.post("/session", (req, res) => {
   const id = randomUUID().slice(0, 8);
   res.json({ id });
 });
 
-const httpServer = createServer(app); // attach express to httpServer
+// Attach Express app to HTTP server
+const httpServer = createServer(app);
+
+// Socket.IO setup
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app",
+    origin: FRONTEND_URL,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -88,6 +97,7 @@ io.on("connection", (socket) => {
   });
 });
 
+// Start server
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
