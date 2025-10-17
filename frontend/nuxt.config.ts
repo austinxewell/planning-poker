@@ -11,5 +11,6 @@ export default defineNuxtConfig({
         plugins: [
             tailwindcss()
         ]
-    }
+    },
+    runtimeConfig: { public: { SOCKET_URL: process.env.VITE_SOCKET_URL || 'http://localhost:4000' } }
 })

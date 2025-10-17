@@ -10,7 +10,8 @@ const sessionId = ref(route.params.id);
 const username = ref(prompt("Enter your name:") || `User${Math.floor(Math.random()*1000)}`);
 const owner = ref("");
 
-const socket = io(import.meta.env.VITE_SOCKET_URL);
+const config = useRuntimeConfig();
+const socket = io(config.public.SOCKET_URL);
 
 const users = ref([]);
 const votes = ref({});
