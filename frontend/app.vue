@@ -1,14 +1,24 @@
 <template>
-  <UApp>
-    <!-- Wrap the layout and page inside the provider/slot context -->
-    <NuxtLayout> 
-      <NuxtPage />
-    </NuxtLayout>
-  </UApp>
+    <UApp>
+        <!-- Wrap the layout and page inside the provider/slot context -->
+        <NuxtLayout> 
+            <NuxtPage />
+        </NuxtLayout>
+    </UApp>
 </template>
 
 <script setup>
-// No top-level reactive state here
+import { useHead } from '#imports'
+
+useHead({
+    title: 'Planning Poker',
+    meta: [
+        {
+            name: 'description',
+            content: 'Planning Poker App' 
+        }
+    ]
+})
 </script>
 
 <style>
