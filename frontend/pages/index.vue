@@ -6,9 +6,13 @@ import axios from 'axios';
 const router = useRouter();
 const joinId = ref('');
 
+// Put your deployed Railway backend URL here
+const BACKEND_URL = 'https://your-backend-railway-url.com';
+
 const createSession = async () => {
   try {
-    const res = await axios.post('/api/session');
+    // Call the deployed backend instead of /api/session
+    const res = await axios.post(`${BACKEND_URL}/session`);
     const id = res.data.id;
     router.push(`/session/${id}`);
   } catch (err) {

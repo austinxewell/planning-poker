@@ -1,18 +1,29 @@
+import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import dotenv from "dotenv";
+import { randomUUID } from "crypto";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
-const httpServer = createServer();
+const app = express();
+app.use(express.json());
+
+// Simple session creation endpoint
+app.post("/session", (req, res) => {
+  const id = randomUUID().slice(0, 8);
+  res.json({ id });
+});
+
+const httpServer = createServer(app); // attach express to httpServer
 const io = new Server(httpServer, {
   cors: {
     origin: process.env.FRONTEND_URL || "https://auewellifyplanningpoker.netlify.app",
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 // In-memory session store
@@ -78,5 +89,5 @@ io.on("connection", (socket) => {
 });
 
 httpServer.listen(PORT, () => {
-  console.log(`Socket.IO server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
