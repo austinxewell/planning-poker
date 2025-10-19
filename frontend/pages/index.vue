@@ -1,6 +1,7 @@
 <template>
-    <div class="flex flex-col justify-center items-center min-h-[calc(100vh-128px)] bg-[#0f172a] text-white px-4 relative overflow-hidden">
+    <div class="min-h-screen flex flex-col items-center justify-center bg-main text-textPrimary transition-colors">
         <UiTitle />
         <UiSessionForm />
     </div>
 </template>
+

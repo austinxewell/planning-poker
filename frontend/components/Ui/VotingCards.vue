@@ -3,9 +3,13 @@
         <button
             v-for="card in options"
             :key="card"
-            class="w-24 h-32 rounded-xl text-white text-2xl font-bold flex items-center justify-center shadow-md"
-            :class="card === myVote ? 'bg-[#cf8500] text-[#0f172a]' : 'bg-[#1e293b] hover:bg-[#374151]'"
             :disabled="disabled"
+            class="w-24 h-32 rounded-xl text-2xl font-bold flex items-center justify-center transition-shadow duration-200 shadow-md"
+            :class="[
+                card === myVote
+                    ? 'bg-[rgb(var(--color-gold))] text-[#0f172a] shadow-lg'
+                    : 'bg-[rgb(var(--color-modal))] text-[rgb(var(--color-text-primary))] hover:bg-[rgb(var(--color-card-hover))] dark:hover:bg-[rgb(var(--color-card-hover))] voting-card-light-border'
+            ]"
             @click="$emit('vote', card)"
         >
             {{ card }}

@@ -15,8 +15,14 @@
                 </div>
             </CommonButton>
         </div>
-        <p class="font-bold my-2">Session ID: {{ sessionId }}</p>
-        <h2 class="text-xl text-gray-300">Hello, {{ username }}</h2>
+
+        <p class="font-bold my-2 text-[rgb(var(--color-text-primary))]">
+            Session ID: {{ sessionId }}
+        </p>
+
+        <h2 class="text-xl text-[rgb(var(--color-text-primary))]">
+            Hello, {{ username }}
+        </h2>
     </div>
 </template>
 

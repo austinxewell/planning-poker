@@ -1,8 +1,15 @@
 <template>
     <UModal v-model:open="isOpen" :dismissible="false">
         <template #content>
-            <div class="flex flex-col items-center justify-center min-h-[200px] gap-4 bg-[#1e293b] p-6">
-                <h2 class="text-xl font-bold text-[#cf8500]">Enter Your Username</h2>
+            <div
+                class="flex flex-col items-center justify-center min-h-[200px] gap-6 bg-modal text-textPrimary dark:bg-modal dark:text-textPrimary border border-cardBorder rounded-lg p-6 transition-colors"
+            >
+                <h2
+                    class="text-xl font-bold"
+                    :class="['text-[rgb(var(--color-primary))]']"
+                >
+                    Enter Your Username
+                </h2>
 
                 <div class="w-full max-w-sm flex gap-3">
                     <CommonInput
@@ -14,6 +21,7 @@
 
                     <CommonButton
                         class="px-5 py-3"
+                        variant="primary"
                         @click="confirmUsername"
                     >
                         Join
@@ -23,7 +31,6 @@
         </template>
     </UModal>
 </template>
-
 <script setup>
 const emit = defineEmits(['confirmed'])
 const isOpen = ref(true)

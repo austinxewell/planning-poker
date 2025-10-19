@@ -3,7 +3,7 @@
         <span
             v-for="user in users"
             :key="user"
-            class="px-3 py-1 bg-[#1e293b] rounded-full text-sm font-medium"
+            class="px-3 py-1 rounded-full text-sm font-medium bg-[rgb(var(--color-modal))] text-[rgb(var(--color-text-primary))] dark:border-none pill-light-border"
         >
             {{ user }}
         </span>

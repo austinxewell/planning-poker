@@ -4,7 +4,10 @@
         :type="type"
         :placeholder="placeholder"
         :value="modelValue"
-        class="flex-1 px-4 py-3 border border-[#cf8500] rounded-xl text-center text-white font-medium bg-[#0f172a] placeholder-[#cf8500] focus:outline-none focus:ring-2 focus:ring-[#cf8500] focus:ring-offset-1"
+        class="flex-1 px-4 py-3 rounded-xl text-center font-medium focus:outline-none focus:ring-2 focus:ring-offset-1 input-light-border"
+        :class="[
+            'bg-[rgb(var(--color-main))] text-[rgb(var(--color-text-primary))] placeholder-[rgb(var(--color-text-primary))] focus:ring-[rgb(var(--color-text-primary))]'
+        ]"
         @input="(e: Event) => emit('update:modelValue', (e.target as HTMLInputElement).value)"
         @keyup.enter="$emit('enter')"
     />

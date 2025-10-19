@@ -1,5 +1,10 @@
 <template>
-    <div class="min-h-screen p-6 bg-[#0f172a] text-white flex flex-col">
+    <div
+        class="min-h-screen p-6 flex flex-col"
+        :class="[
+            'bg-[rgb(var(--color-main))] text-[rgb(var(--color-text-primary))]'
+        ]"
+    >
         <UiSessionHeader
             :session-id="sessionId"
             :username="username"
