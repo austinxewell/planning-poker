@@ -1,15 +1,16 @@
 <template>
     <div class="mb-6 text-center">
-        <button
-            class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
+        <CommonButton
+            class="w-40 h-12"
+            variant="neutral"
             @click="$emit('leave')"
         >
             {{ username === owner && !sessionEnded ? 'End Session' : 'Leave Session' }}
-        </button>
+        </CommonButton>
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 defineProps({
     username: {
         type: String,
@@ -24,4 +25,6 @@ defineProps({
         default: false
     }
 })
+
+defineEmits(['leave'])
 </script>

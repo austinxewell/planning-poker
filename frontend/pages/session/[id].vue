@@ -36,6 +36,18 @@
             :session-ended="sessionEnded"
             @leave="leaveSession"
         />
+
+        <UiUsernameModal
+            v-if="!username"
+            @confirmed="onUsernameConfirmed"
+        />
+
+        <CommonAlertModal
+            v-model:open="showAlert"
+            title="Session Has Ended"
+            message="The owner has ended your session"
+            @confirm="goHome"
+        />
     </div>
 </template>
 
@@ -54,6 +66,8 @@ const users = ref([])
 const votes = ref({})
 const revealed = ref(false)
 const sessionEnded = ref(false)
+const showAlert = ref(false)
+// eslint-disable-next-line no-magic-numbers
 const cardOptions = [1, 2, 3, 5, 8, 13, 21, '?']
 
 let socket
@@ -104,27 +118,11 @@ const mostPopularVote = computed(() => {
 })
 
 onMounted(() => {
-    username.value =
-    prompt('Enter your name:') || `User${Math.floor(Math.random() * 1000)}`
-    socket = io(config.public.SOCKET_URL)
-
-    socket.emit('join', {
-        sessionId: sessionId.value,
-        username: username.value 
-    })
-
-    socket.on('update', (data) => {
-        users.value = data.users
-        votes.value = data.votes
-        revealed.value = data.revealed
-        owner.value = data.owner
-    })
-
-    socket.on('sessionEnded', () => {
-        sessionEnded.value = true
-        alert('The session has ended because the owner left.')
-        router.push('/')
-    })
+    const saved = localStorage.getItem('poker_username')
+    if (saved) {
+        username.value = saved
+        connectSocket()
+    }
 })
 
 watch(
@@ -136,6 +134,38 @@ watch(
         })
     }
 )
+
+function goHome() {
+    showAlert.value = false
+    router.push('/')
+}
+
+function onUsernameConfirmed(finalName) {
+    username.value = finalName
+    localStorage.setItem('poker_username', finalName)
+    connectSocket()
+}
+
+function connectSocket() {
+    socket = io(config.public.SOCKET_URL)
+
+    socket.emit('join', {
+        sessionId: sessionId.value,
+        username: username.value
+    })
+
+    socket.on('update', (data) => {
+        users.value = data.users
+        votes.value = data.votes
+        revealed.value = data.revealed
+        owner.value = data.owner
+    })
+
+    socket.on('sessionEnded', () => {
+        sessionEnded.value = true
+        showAlert.value = true
+    })
+}
 
 function vote(value) {
     if (!sessionEnded.value) 
@@ -162,7 +192,7 @@ function leaveSession() {
 function copyLink() {
     navigator.clipboard.writeText(window.location.href)
         .then(() => toast.add({
-            title: 'Link copied',
+            title: 'Session link copied',
             color: 'primary' 
         }))
         .catch(() => toast.add({

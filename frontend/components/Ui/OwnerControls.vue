@@ -1,17 +1,23 @@
 <template>
     <div class="flex gap-3 mb-6 justify-center">
-        <button
-            class="px-4 py-2 bg-[#cf8500] text-[#0f172a] font-bold rounded hover:bg-[#e6a930]"
+        <CommonButton
+            class="w-40 h-12"
+            variant="gold"
             @click="$emit('reveal')"
         >
             Reveal
-        </button>
-        <button
-            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        </CommonButton>
+
+        <CommonButton
+            class="w-40 h-12"
+            variant="red"
             @click="$emit('reset')"
         >
             Reset
-        </button>
+        </CommonButton>
     </div>
 </template>
-<script setup></script>
+
+<script setup lang="ts">
+defineEmits(['reveal', 'reset'])
+</script>
