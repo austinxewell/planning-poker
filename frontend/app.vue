@@ -1,6 +1,5 @@
 <template>
     <UApp>
-        <!-- Wrap the layout and page inside the provider/slot context -->
         <NuxtLayout> 
             <NuxtPage />
         </NuxtLayout>

@@ -1,2 +1,72 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+/* --- Custom 3D flip utilities --- */
+.perspective-\[600px\] { perspective: 600px; }
+.transform-style-preserve-3d { transform-style: preserve-3d; }
+.backface-hidden { backface-visibility: hidden; }
+.rotate-y-0 { transform: rotateY(0deg); }
+.rotate-y-180 { transform: rotateY(180deg); }
+
+/* Light mode thin border for voting cards */
+.voting-card-light-border {
+  border: 2px solid rgb(var(--color-text-primary));
+}
+
+/* Dark mode: thin gold border */
+.dark .voting-card-light-border {
+  border: 1px solid rgb(var(--color-gold));
+}
+/* Light mode pill border */
+.light .pill-light-border {
+  border: 1px solid rgb(var(--color-text-primary));
+}
+
+/* Light mode input border */
+.input-light-border {
+  border: 2px solid rgb(var(--color-text-primary));
+}
+
+/* Dark mode input border */
+.dark .input-light-border {
+  border: 1px solid rgb(var(--color-gold));
+}
+
+/* --- Light/Dark mode color variables --- */
+:root {
+  --color-header: 255 255 255;        /* white */
+  --color-main: 249 250 251;           /* gray-50 */
+  --color-modal: 255 255 255;
+  --color-modal-ring: 207 133 0;       /* #cf8500 */
+  --color-text-primary: 15 23 42;      /* slate-900 */
+  --color-card-border: 212 160 23;     /* #d4a017 */
+  --color-card-hover: 243 244 246;     /* gray-100 */
+
+  --color-primary-from: 207 133 0;
+  --color-primary-to: 224 161 61;
+  --color-gold: 207 133 0;
+  --color-red: 185 28 28;
+  --color-neutral-bg: 243 244 246;
+  --color-neutral-text: 15 23 42;
+  --color-dark-bg: 243 244 246;
+  --color-dark-text: 15 23 42;
+}
+
+.dark {
+  --color-header: 31 41 55;           /* #1f2937 */
+  --color-main: 15 23 42;             /* #0f172a */
+  --color-modal: 30 41 59;            /* #1e293b */
+  --color-modal-ring: 207 133 0;      /* #cf8500 */
+  --color-text-primary: 207 133 0;    /* gold text */
+  --color-card-border: 212 160 23;    /* #d4a017 */
+  --color-card-hover: 55 65 81;       /* #374151 */
+
+  --color-primary-from: 207 133 0;
+  --color-primary-to: 224 161 61;
+  --color-gold: 207 133 0;
+  --color-red: 185 28 28;
+  --color-neutral-bg: 30 41 59;
+  --color-neutral-text: 255 255 255;
+  --color-dark-bg: 30 41 59;
+  --color-dark-text: 207 133 0;
+}
