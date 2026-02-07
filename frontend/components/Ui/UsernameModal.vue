@@ -32,9 +32,16 @@
     </UModal>
 </template>
 <script setup>
+const props = defineProps({
+    storedUsername: {
+        type: String,
+        default: ''
+    }
+})
+
 const emit = defineEmits(['confirmed'])
 const isOpen = ref(true)
-const tempUsername = ref('')
+const tempUsername = ref(props.storedUsername)
 
 defineShortcuts({ o: () => isOpen.value = !isOpen.value })
 
