@@ -12,8 +12,8 @@
             class="text-5xl sm:text-6xl font-extrabold text-center relative z-20
             leading-[1.2] sm:leading-[1.25]"
             :class="{
-                'text-primary-light drop-shadow-[0_0_8px_rgb(207,133,0)]': !isDark, // solid blue + gold glow
-                'bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]': isDark // gradient in dark
+                'text-primary-light drop-shadow-[0_0_8px_rgb(207,133,0)]': !isDark,
+                'bg-clip-text text-transparent drop-shadow-[0_2px_6px_rgba(0,0,0,0.7)]': isDark
             }"
             :style="isDark
                 ? 'background-image: linear-gradient(to right, rgb(var(--color-primary-from)), rgb(var(--color-primary-to)))'
