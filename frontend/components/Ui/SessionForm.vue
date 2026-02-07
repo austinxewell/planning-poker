@@ -1,25 +1,31 @@
 <template>
     <div
-        class="bg-modal rounded-3xl shadow-2xl p-10 flex flex-col items-center gap-8 w-full max-w-md
-            ring-1 ring-modalRing/20 relative z-10 transition-colors"
+        class="px-4 sm:px-0 flex justify-center w-full"
     >
-        <CommonButton class="w-full py-4" @click="createSession">
-            Start New Session
-        </CommonButton>
-
-        <div class="w-full flex items-center justify-center gap-3 text-textPrimary font-medium">
-            <span>or join an existing session</span>
-        </div>
-
-        <div class="w-full flex gap-3">
-            <CommonInput
-                v-model="joinId"
-                placeholder="Enter session ID"
-                @enter="joinSession"
-            />
-            <CommonButton class="px-8 py-4" @click="joinSession">
-                Join
+        <div
+            class="bg-modal rounded-3xl shadow-2xl p-6 sm:p-10 flex flex-col items-center gap-6 sm:gap-8 w-full max-w-md
+            ring-1 ring-modalRing/20 relative z-10 transition-colors"
+        >
+            <CommonButton class="w-full py-3 sm:py-4" @click="createSession">
+                Start New Session
             </CommonButton>
+
+            <div class="w-full flex items-center justify-center gap-2 sm:gap-3 text-textPrimary font-medium text-sm sm:text-base">
+                <span>or join an existing session</span>
+            </div>
+
+            <div class="w-full flex flex-col sm:flex-row gap-2 sm:gap-3">
+                <CommonInput
+                    v-model="joinId"
+                    placeholder="Enter session ID"
+                    class="flex-1"
+                    @enter="joinSession"
+                />
+
+                <CommonButton class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4" @click="joinSession">
+                    Join
+                </CommonButton>
+            </div>
         </div>
     </div>
 </template>
