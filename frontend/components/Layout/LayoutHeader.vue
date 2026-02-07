@@ -7,7 +7,7 @@
                 alt="Small Logo"
             />
             <img
-                class="h-8 sm:hidden lg:block"
+                class="hidden sm:h-8 sm:block"
                 :src="textLogo"
                 alt="Text Logo"
             />

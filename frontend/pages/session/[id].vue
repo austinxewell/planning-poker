@@ -20,6 +20,7 @@
 
         <UiMembersList 
             :users="users"
+            :stored-user="username"
             @edit-username="onUsernameConfirmed"
         />
 

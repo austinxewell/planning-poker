@@ -1,11 +1,11 @@
 <template>
     <div class="relative flex justify-center items-center w-full mb-14 overflow-visible pb-4">
         <div class="absolute flex justify-center items-center pointer-events-none z-0">
-            <div class="absolute w-28 h-44 bg-modal border-2 border-cardBorder rounded-lg shadow-xl transform -rotate-12 -translate-x-24 opacity-50"/>
-            <div class="absolute w-28 h-44 bg-modal border-2 border-cardBorder rounded-lg shadow-xl transform -rotate-6 -translate-x-12 opacity-60"/>
-            <div class="absolute w-28 h-44 bg-modal border-2 border-cardBorder rounded-lg shadow-xl opacity-70"/>
-            <div class="absolute w-28 h-44 bg-modal border-2 border-cardBorder rounded-lg shadow-xl transform rotate-6 translate-x-12 opacity-80"/>
-            <div class="absolute w-28 h-44 bg-modal border-2 border-cardBorder rounded-xl shadow-xl transform rotate-12 translate-x-24 opacity-90"/>
+            <div class="absolute w-28 h-44 bg-[rgb(var(--color-card-bg))] border-2 border-cardBorder rounded-lg shadow-xl transform -rotate-12 -translate-x-24"/>
+            <div class="absolute w-28 h-44 bg-[rgb(var(--color-card-bg))] border-2 border-cardBorder rounded-lg shadow-xl transform -rotate-6 -translate-x-12"/>
+            <div class="absolute w-28 h-44 bg-[rgb(var(--color-card-bg))] border-2 border-cardBorder rounded-lg shadow-xl"/>
+            <div class="absolute w-28 h-44 bg-[rgb(var(--color-card-bg))] border-2 border-cardBorder rounded-lg shadow-xl transform rotate-6 translate-x-12"/>
+            <div class="absolute w-28 h-44 bg-[rgb(var(--color-card-bg))] border-2 border-cardBorder rounded-xl shadow-xl transform rotate-12 translate-x-24"/>
         </div>
 
         <h1
