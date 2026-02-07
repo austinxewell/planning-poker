@@ -50,6 +50,24 @@ export default function pokerSocket(io) {
             }
         });
 
+        socket.on("updateUsername", ({ sessionId, username: newName }) => {
+            const session = getSession(sessionId);
+            if (!session) return;
+
+            const oldName = socket.username;
+
+            session.users = session.users.map((user) => (user === oldName ? newName : user));
+
+            if (session.votes[oldName] !== undefined) {
+                session.votes[newName] = session.votes[oldName];
+                delete session.votes[oldName];
+            }
+
+            socket.username = newName;
+
+            io.to(sessionId).emit("update", session);
+        });
+
         socket.on("disconnect", () => {
             console.log("Client disconnected:", socket.id);
         });

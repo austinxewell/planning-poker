@@ -18,7 +18,11 @@
             @vote="vote"
         />
 
-        <UiMembersList :users="users" />
+        <UiMembersList 
+            :users="users"
+            :stored-user="username"
+            @edit-username="onUsernameConfirmed"
+        />
 
         <div class="flex flex-col lg:flex-row gap-6 mb-6 max-w-4xl mx-auto w-full">
             <UiAverageVoteCard :average-vote="averageVote" />
@@ -132,10 +136,13 @@ onMounted(() => {
 
 watch(
     () => route.params.id,
-    (newId) => {
-        socket?.emit('join', {
+    (newId, oldId) => {
+        if (!socket) return
+
+        socket.emit('leave', oldId)
+        socket.emit('join', {
             sessionId: newId,
-            username: username.value 
+            username: username.value
         })
     }
 )
@@ -146,9 +153,21 @@ function goHome() {
 }
 
 function onUsernameConfirmed(finalName) {
+    const oldName = username.value
+
+    users.value = users.value.map(user =>
+        user === oldName ? finalName : user
+    )
+
     username.value = finalName
     localStorage.setItem('poker_username', finalName)
-    connectSocket()
+
+    if (!socket) connectSocket()
+    else 
+        socket.emit('updateUsername', {
+            sessionId: sessionId.value,
+            username: finalName
+        })
 }
 
 function connectSocket() {

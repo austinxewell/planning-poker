@@ -27,7 +27,10 @@
                             :class="['bg-[rgb(var(--color-modal))] text-[rgb(var(--color-text-primary))]']"
                             style="backface-visibility: hidden;"
                         >
-                            ❓
+                            <UIcon 
+                                name="material-symbols:question-mark-rounded"
+                                class="size-14"
+                            />
                         </div>
 
                         <!-- Back -->
