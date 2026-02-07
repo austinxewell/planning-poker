@@ -31,11 +31,14 @@ defineProps({
     users: {
         type: Array,
         default: () => [] 
+    },
+    storedUser: {
+        type: String,
+        default: ''
     }
 })
 
 const emit = defineEmits(['edit-username'])
-const storedUser = localStorage.getItem('poker_username')
 const isEditUsername = ref(false)
 
 function editUsername() {
@@ -44,5 +47,6 @@ function editUsername() {
 
 function onUsernameConfirmed(updatedUsername) {
     emit('edit-username', updatedUsername)
+    isEditUsername.value = false
 }
 </script>
