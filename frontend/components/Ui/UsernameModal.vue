@@ -11,7 +11,7 @@
                     Enter Your Username
                 </h2>
 
-                <div class="w-full max-w-sm flex gap-3">
+                <div class="w-full max-w-sm flex flex-col sm:flex-row gap-3">
                     <CommonInput
                         v-model="tempUsername"
                         placeholder="Enter Username"
@@ -20,7 +20,7 @@
                     />
 
                     <CommonButton
-                        class="px-5 py-3"
+                        class="w-full sm:w-auto py-3 sm:px-5"
                         variant="primary"
                         @click="confirmUsername"
                     >
