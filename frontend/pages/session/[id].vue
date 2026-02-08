@@ -9,6 +9,7 @@
             :session-id="sessionId"
             :username="username"
             @copy-link="copyLink"
+            @edit-username="onUsernameConfirmed"
         />
 
         <UiVotingCards
@@ -18,14 +19,11 @@
             @vote="vote"
         />
 
-        <UiMembersList 
-            :users="users"
-            :stored-user="username"
-            @edit-username="onUsernameConfirmed"
-        />
+        <UiMembersList :users="users" />
 
         <div class="flex flex-col lg:flex-row gap-6 mb-6 max-w-4xl mx-auto w-full">
             <UiAverageVoteCard :average-vote="averageVote" />
+            
             <UiVotesList
                 :display-votes="displayVotes"
                 :revealed="revealed"

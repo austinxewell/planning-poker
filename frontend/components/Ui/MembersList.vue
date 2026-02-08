@@ -6,23 +6,7 @@
             class="px-3 py-1 rounded-full text-sm font-medium bg-[rgb(var(--color-modal))] text-[rgb(var(--color-text-primary))] dark:border-none pill-light-border"
         >
             {{ user }}
-
-            <button 
-                v-if="user === storedUser" 
-                class="cursor-pointer"
-                @click="editUsername"
-            >
-                <UIcon 
-                    name="material-symbols:edit-outline-sharp"
-                />
-            </button>
         </div>
-
-        <UiUsernameModal 
-            v-if="isEditUsername"
-            :stored-username="storedUser"
-            @confirmed="onUsernameConfirmed"
-        />
     </div>
 </template>
 
@@ -31,22 +15,6 @@ defineProps({
     users: {
         type: Array,
         default: () => [] 
-    },
-    storedUser: {
-        type: String,
-        default: ''
     }
 })
-
-const emit = defineEmits(['edit-username'])
-const isEditUsername = ref(false)
-
-function editUsername() {
-    isEditUsername.value = true
-}
-
-function onUsernameConfirmed(updatedUsername) {
-    emit('edit-username', updatedUsername)
-    isEditUsername.value = false
-}
 </script>
