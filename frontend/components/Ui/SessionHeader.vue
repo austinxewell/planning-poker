@@ -20,9 +20,29 @@
             Session ID: {{ sessionId }}
         </p>
 
-        <h2 class="text-xl text-[rgb(var(--color-text-primary))]">
-            Hello, {{ username }}
+        <h2
+            class="flex items-center justify-center gap-2 text-xl text-[rgb(var(--color-text-primary))]"
+        >
+            <span class="leading-none">
+                Hello, {{ username }}
+            </span>
+
+            <button
+                class="flex items-center leading-none cursor-pointer"
+                @click="toggleEditUsername"
+            >
+                <UIcon
+                    name="material-symbols:edit-outline-sharp"
+                    class="text-xl"
+                />
+            </button>
         </h2>
+
+        <UiUsernameModal 
+            v-if="isEditUsername"
+            :stored-username="username"
+            @confirmed="onUsernameConfirmed"
+        />
     </div>
 </template>
 
@@ -37,4 +57,16 @@ defineProps({
         default: '' 
     }
 })
+
+const emit = defineEmits(['copy-link', 'edit-username'])
+const isEditUsername = ref(false)
+
+function toggleEditUsername() {
+    isEditUsername.value = true
+}
+
+function onUsernameConfirmed(updatedUsername) {
+    emit('edit-username', updatedUsername)
+    isEditUsername.value = false
+}
 </script>
